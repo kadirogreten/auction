@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { check } = require("express-validator"); // bunu body ve request leri validate etmek için kullanıyoruz
-const { validateToken } = require("../utils/Auth");
 const { checkRole } = require("../middlewares/roleMiddleware");
 
 // Controller
 const AccountController = require("../controller/accountController");
+const AuthorizationController = require("../controller/authorizationController");
 
 // users registiration Route
 
@@ -27,24 +27,26 @@ router.post(
 
 router.post(
   "/profile",
-  validateToken,
   checkRole(["User", "Admin", "Superuser", "Moderator"]),
   check("id").exists().notEmpty(),
+  AuthorizationController.validateToken,
   AccountController.getProfile // tüm validasyonlardan sonra artık controller a gönderiyoruz
 );
 
 /** role tanımlamaları */
 router.post(
   "/sendOffer",
-  validateToken,
   checkRole(["Admin", "Moderator"]),
   check("id").exists().notEmpty(),
+  AuthorizationController.validateToken,
   AccountController.getProfile
 );
 
 router.post(
-  "/getUsers",
-  AccountController.getAllUsersWithPagination
+  "/getUser",
+  check("role").exists().notEmpty(),
+  AuthorizationController.validateToken,
+  AccountController.getProfile
 );
 
 module.exports = router;

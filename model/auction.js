@@ -29,10 +29,12 @@ const schema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'AuctionImages'
     }],
+
     offers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Offer'
     }],
+
     createdAt: {
         type: Date,
         required: false
@@ -45,6 +47,11 @@ const schema = mongoose.Schema({
 
     deletedAt: {
         type: Date,
+        required: false
+    },
+    
+    isActive: {
+        type: Boolean,
         required: false
     }
 

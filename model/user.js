@@ -13,6 +13,14 @@ const schema = mongoose.Schema({
         type: String,
         required: true,
     },
+    socketId: {
+        type: String,
+        required: false,
+    },
+    isOnline: {
+        type: Boolean,
+        required: false
+    },
     password: {
         type: String,
         required: true,

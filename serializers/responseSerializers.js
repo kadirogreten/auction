@@ -4,8 +4,7 @@ const registerResponseSerializers = user => {
         email: user.email,
         id: user._id,
         createdAt: user.createdAt,
-        name: user.name,
-        surname: user.surname
+        name: user.name
     };
 }
 
@@ -16,8 +15,7 @@ const profileResponseSerializers = user => {
         email: user.email,
         id: user._id,
         createdAt: user.createdAt,
-        name: user.name,
-        surname: user.surname
+        name: user.name
 
     };
 }

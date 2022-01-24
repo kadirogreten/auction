@@ -13,6 +13,10 @@ getProfileByUsername = async (username) => {
     return await AccountRepository.getProfileByUsername(username);
 }
 
+getProfileByEmail = async (email) => {
+    return await AccountRepository.getProfileByEmail(email);
+}
+
 getToken = async (username, password, role) => {
     return await AccountRepository.login(username, password, role);
 }
@@ -26,6 +30,7 @@ module.exports = {
     register,
     getProfileById,
     getProfileByUsername,
+    getProfileByEmail,
     getToken,
     getAllUsers
 }

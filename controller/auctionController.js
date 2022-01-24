@@ -6,7 +6,11 @@ getAllAuctions = async (req, res, next) => {
     // check request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+            success: false,
+            errorMessage: "Validation Error!",
+            errors: errors.array()
+        });
     }
 
     const result = await AuctionService.getAll();
@@ -17,7 +21,11 @@ findAuctionById = async (req, res, next) => {
     // check request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+            success: false,
+            errorMessage: "Validation Error!",
+            errors: errors.array()
+        });
     }
 
     const { id } = req.body;

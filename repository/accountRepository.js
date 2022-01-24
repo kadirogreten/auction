@@ -85,9 +85,11 @@ getProfileById = async (id) => {
   }
   return {
     success: true,
-    data: profileResponseSerializers(result),
+    data: result !== null ? profileResponseSerializers(result) : result,
   };
 };
+
+
 /** get profile by username */
 getProfileByUsername = async (username) => {
   // return Promise result from MongoDB
@@ -115,7 +117,38 @@ getProfileByUsername = async (username) => {
   }
   return {
     success: true,
-    data: profileResponseSerializers(result),
+    data: result !== null ? profileResponseSerializers(result) : result,
+  };
+};
+
+/** get profile by username */
+getProfileByEmail = async (email) => {
+  // return Promise result from MongoDB
+  let result;
+  try {
+    const options = {
+      // Include only the `name`, `username`, `email` and `_id` fields in the returned document
+      projection: {
+        password: 0,
+        __v: 0,
+      },
+    };
+
+    result = await User.findOne(
+      {
+        email: email,
+      },
+      options
+    );
+  } catch (error) {
+    return {
+      success: false,
+      errorMessage: error,
+    };
+  }
+  return {
+    success: true,
+    data: result !== null ? profileResponseSerializers(result) : result,
   };
 };
 
@@ -183,6 +216,7 @@ module.exports = {
   register,
   getProfileById,
   getProfileByUsername,
+  getProfileByEmail,
   login,
   getAllWithPagination,
 };

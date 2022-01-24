@@ -1,8 +1,6 @@
 
 const { validationResult } = require("express-validator");
-const { register, getProfileById, getToken, getAllUsers } = require("../service/accountService");
-const { validateEmail, validateUsername } = require("../utils/Auth");
-
+const AccountService = require("../service/accountService");
 
 /**
  * @description Register User
@@ -14,29 +12,33 @@ registerUser = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
+      success: false,
+      errorMessage: "Validation Error!",
       errors: errors.array(),
     });
   }
 
   const { user } = req.body;
-  console.log(user);
+  var checkUsername = await AccountService.getProfileByUsername(user.username);
+  var checkEmail = await AccountService.getProfileByEmail(user.email);
 
-  if (!validateUsername(user.username)) {
-    console.log("validateUsername(user.username)");
+  if (checkUsername.data !== null) {
     return res.status(400).json({
-      message: "Username daha önceden kayıtlı",
+      errorMessage: "Girmiş olduğunuz kullanıcı adı kullanılmaktadır. Lütfen başka bir kullanıcı adı giriniz.",
+      field: "username",
       success: false,
     });
   }
 
-  if (!validateEmail(user.email)) {
+  if (checkEmail.data !== null) {
     return res.status(400).json({
-      message: "E-posta daha önceden kayıtlı",
+      errorMessage: "Sistemde kayıtlı bir e-posta girdiniz. Lütfen başka bir e-posta adresi giriniz. ",
+      field: "email",
       success: false,
     });
   }
 
-  const result = await register(user);
+  const result = await AccountService.register(user);
   res.send(result);
 };
 
@@ -50,15 +52,17 @@ getProfile = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
+      success: false,
+      errorMessage: "Validation Error!",
       errors: errors.array(),
     });
   }
 
-  const { id } = req.body;
-  console.log(id);
-  result = await getProfileById(id);
-
+  const { userId } = req.body.user;
+  result = await AccountService.getProfileById(userId);
+  result.data.token = req.headers.token;
   res.send(result);
+
 };
 
 /**
@@ -72,10 +76,12 @@ login = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
+      success: false,
+      errorMessage: "Validation Error!",
       errors: errors.array(),
     });
   }
-  result = await getToken(username, password, role);
+  result = await AccountService.getToken(username, password, role);
   console.log(result);
   res.send(result);
 };
@@ -97,12 +103,12 @@ getAllUsersWithPagination = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
+      success: false,
+      errorMessage: "Validation Error!",
       errors: errors.array(),
     });
   }
-  console.log(pageModel);
-  result = await getAllUsers(pageModel);
-  console.log(result);
+  result = await AccountService.getAllUsers(pageModel);
   res.send(result);
 }
 
