@@ -1,0 +1,307 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Antique Müzayede App",
+        "description": "Antique Müzayede App Api documentation.",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "tags": [{
+        "name": "Developers",
+        "description": "API for developers"
+    }],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "security": [{
+        "JWT": []
+    }],
+    "paths": {
+        "/account/login": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Login in system",
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "user login",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/LoginViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/register": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Create a new user in system",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "player register",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/RegisterViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessRegisterResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/getUsers": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Users in system",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [{
+                    "JWT": []
+                }],
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "player pagination",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/PageViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/account/profile": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get profile in system",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [{
+                    "JWT": []
+                }],
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "player register",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/ProfileViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "LoginViewModel": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "PageViewModel": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "number"
+                },
+                "limit": {
+                    "type": "number"
+                }
+            }
+        },
+        "RegisterViewModel": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "role": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "ProfileViewModel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string"
+                        },
+                        "role": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "token": {
+                            "type": "string"
+                        },
+                        "expiresIn": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "SuccessRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string"
+                        },
+                        "role": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "createdAt": {
+                            "type": "number"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "surname": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "errorMessage": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
